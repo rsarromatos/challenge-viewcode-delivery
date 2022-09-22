@@ -10,6 +10,7 @@ import UIKit
 enum DesignSystemColor {
     case primary
     case secondary
+    case white
     
     var color: UIColor {
         switch self {
@@ -17,6 +18,8 @@ enum DesignSystemColor {
             return UIColor(red: 0, green: 0, blue: 0, alpha: 1)
         case .secondary:
             return UIColor(red: 0.235, green: 0.235, blue: 0.263, alpha: 0.6)
+        case .white:
+            return .white
         }
     }
 }

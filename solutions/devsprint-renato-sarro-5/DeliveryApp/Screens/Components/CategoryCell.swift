@@ -22,7 +22,7 @@ final class CategoryCell: UIView {
 
     private lazy var labelCategory: UILabel = {
         let label = UILabel.build(style: .captionOne)
-        label.text = "Mercado"
+        label.text = name
         label.translatesAutoresizingMaskIntoConstraints = false
 
         return label
@@ -39,14 +39,14 @@ final class CategoryCell: UIView {
         return stack
     }()
 
-    func changeCategoryName(_ name:  String) {
-        labelCategory.text = name
-    }
+    private let name: String
 
     //MARK: - Initialization
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(with name: String) {
+        self.name = name
+        
+        super.init(frame: .zero)
 
         setupViews()
     }

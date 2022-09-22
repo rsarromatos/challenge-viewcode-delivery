@@ -15,15 +15,18 @@ struct HomeViewConfiguration {
 final class HomeView: UIView {
 
     private let restaurantCellIdentifier = "RestaurantCellIdentifier"
+    private let categoryCellIdentifier = "CategoryCellIdentifier"
 
     private var restaurants: [Restaurant] = []
 
     private lazy var tableView: UITableView = {
-
         let tableView = UITableView(frame: .zero)
+        tableView.estimatedRowHeight = 64
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: self.restaurantCellIdentifier)
+        tableView.register(RestaurantCell.self, forCellReuseIdentifier: self.restaurantCellIdentifier)
+        tableView.register(CategorySectionCell.self, forCellReuseIdentifier: self.categoryCellIdentifier)
         tableView.dataSource = self
+        
         return tableView
     }()
 
@@ -39,7 +42,6 @@ final class HomeView: UIView {
     }
 
     func updateView(with restaurants: [Restaurant]) {
-
         self.restaurants = restaurants
         self.tableView.reloadData()
     }
@@ -72,20 +74,43 @@ private extension HomeView {
     }
 }
 
-extension HomeView: UITableViewDataSource {
+extension HomeView: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return self.restaurants.count
+        switch section {
+        case 0, 1:
+            return 1
+        default:
+            return self.restaurants.count
+        }
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        let cell = tableView.dequeueReusableCell(withIdentifier: self.restaurantCellIdentifier)!
-        cell.textLabel?.text = self.restaurants[indexPath.row].name
+        switch indexPath.section {
+        case 0:
+            return UITableViewCell()
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: categoryCellIdentifier, for: indexPath) as? CategorySectionCell else { return UITableViewCell() }
+            
+            cell.updateCategories(with: restaurants.map { $0.category })
+            
+            return cell
+        default:
+            break
+        }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: self.restaurantCellIdentifier) as? RestaurantCell else {
+            return UITableViewCell()
+        }
+        
+        cell.updateCell(with: restaurants[indexPath.row])
+        
         return cell
     }
 }
-
-
-

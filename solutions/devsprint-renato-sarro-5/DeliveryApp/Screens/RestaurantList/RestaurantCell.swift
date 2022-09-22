@@ -22,16 +22,14 @@ class RestaurantCell: UITableViewCell {
     
     private lazy var titleLabel: UILabel = {
         let label = UILabel.build(style: .subheadline(weight: .semibold))
-        label.text = "Benjamin a Padaria"
         label.translatesAutoresizingMaskIntoConstraints = false
         
         return label
     }()
     
-    private lazy var titleDescription: UILabel = {
+    private lazy var descriptionLabel: UILabel = {
         let label = UILabel.build(style: .footnote)
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Italiana • 38-48 min"
         
         return label
     }()
@@ -43,6 +41,11 @@ class RestaurantCell: UITableViewCell {
 
     @available(*, unavailable)
     required init?(coder: NSCoder) { nil }
+    
+    func updateCell(with restaurant: Restaurant) {
+        titleLabel.text = restaurant.name
+        descriptionLabel.text = restaurant.category
+    }
 }
 
 extension RestaurantCell: ViewCodeProtocol {
@@ -52,7 +55,7 @@ extension RestaurantCell: ViewCodeProtocol {
     }
     
     func buildViews() {
-        contentView.addSubviews([icon, titleLabel, titleDescription])
+        contentView.addSubviews([icon, titleLabel, descriptionLabel])
     }
     
     func setupConstraints() {
@@ -61,17 +64,17 @@ extension RestaurantCell: ViewCodeProtocol {
         
         NSLayoutConstraint.activate([
             icon.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            icon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            icon.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 24),
             icon.heightAnchor.constraint(equalToConstant: 48),
             icon.widthAnchor.constraint(equalToConstant: 48),
             
             titleLabel.bottomAnchor.constraint(equalTo: contentView.centerYAnchor),
             titleLabel.leadingAnchor.constraint(equalTo: icon.trailingAnchor, constant: 12),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -24),
             
-            titleDescription.topAnchor.constraint(equalTo: contentView.centerYAnchor),
-            titleDescription.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            titleDescription.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            descriptionLabel.topAnchor.constraint(equalTo: contentView.centerYAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
             bottomConstraint
         ])
     }
